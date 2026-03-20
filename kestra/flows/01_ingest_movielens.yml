@@ -18,3 +18,14 @@ tasks:
       - gsutil cp /tmp/movielens/ml-32m/ratings.csv gs://movie-investment-pipeline-data-lake/raw/movielens/ratings.csv
       - gsutil cp /tmp/movielens/ml-32m/movies.csv gs://movie-investment-pipeline-data-lake/raw/movielens/movies.csv
       - echo "Upload complete"
+  - id: run_spark_job
+    type: io.kestra.plugin.scripts.shell.Commands
+    containerImage: movie-investment-pipeline-spark:latest
+    env:
+      GCP_CREDS: "{{kv('GCP_CREDS')}}"
+    commands:
+      - printf '%s' "$GCP_CREDS" > /tmp/gcp-key.json
+      - spark-submit
+          --driver-memory 4g
+          --executor-memory 4g
+          /opt/spark/work/genre_explode.py

@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import split, explode, col, count, avg, round
 from pyspark.sql.functions import from_unixtime, to_timestamp
+import json
 
 # 1. Spark session oluştur
 spark = SparkSession.builder \
@@ -9,7 +10,7 @@ spark = SparkSession.builder \
 
 # GCS credentials
 spark.conf.set("google.cloud.auth.service.account.json.keyfile", 
-               "/credentials/gcp-key.json")
+               "/tmp/gcp-key.json")
 spark.conf.set("fs.gs.impl", 
                "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem")
 spark.conf.set("fs.AbstractFileSystem.gs.impl", 
@@ -17,6 +18,12 @@ spark.conf.set("fs.AbstractFileSystem.gs.impl",
 
 BUCKET = "movie-investment-pipeline-data-lake"
 PROJECT = "movie-investment-pipeline"
+
+#Proje id'yi okuyalım
+with open("/tmp/gcp-key.json") as f:
+    creds = json.load(f)
+    project_id = creds["project_id"]
+    PROJECT = project_id
 
 # 2. GCS'ten oku
 print("Reading data from GCS...")
@@ -62,8 +69,9 @@ print("Parquet written successfully!")
 print("Writing to BigQuery...")
 df.write \
     .format("bigquery") \
+    .option("parentProject", project_id) \
     .option("table", f"{PROJECT}.raw.ratings_with_genres") \
-    .option("credentialsFile", "/credentials/gcp-key.json") \
+    .option("credentialsFile", "/tmp/gcp-key.json") \
     .option("partitionField", "rating_timestamp") \
     .option("partitionType", "MONTH") \
     .option("temporaryGcsBucket", BUCKET) \
