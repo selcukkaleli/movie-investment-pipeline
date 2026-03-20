@@ -11,6 +11,7 @@ services:
       - ./kestra/flows:/flows
       - ./credentials:/credentials
     environment:
+      GCP_CREDS: ${GCP_CREDS}
       KESTRA_CONFIGURATION: |
         datasources:
           postgres:
@@ -49,6 +50,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  spark:
+    build: ./spark
+    container_name: spark-job
+    volumes:
+      - ./credentials:/credentials
+      - ./spark:/opt/spark/work
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/credentials/gcp-key.json
+    profiles:
+      - spark
 
 volumes:
   kestra-data:

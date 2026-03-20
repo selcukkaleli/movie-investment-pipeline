@@ -1,0 +1,20 @@
+id: ingest_movielens
+namespace: movie.pipeline
+
+description: "Download MovieLens 32M dataset and upload to GCS"
+
+tasks:
+  - id: download_unzip_upload
+    type: io.kestra.plugin.scripts.shell.Commands
+    containerImage: google/cloud-sdk:slim
+    commands:
+      - apt-get install -y unzip -qq
+      - curl -L https://files.grouplens.org/datasets/movielens/ml-32m.zip -o /tmp/ml-32m.zip
+      - echo "Download complete"
+      - unzip -o /tmp/ml-32m.zip -d /tmp/movielens
+      - echo "Unzip complete"
+      - printf '%s' '{{kv("GCP_CREDS")}}' > /tmp/gcp-key.json
+      - gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+      - gsutil cp /tmp/movielens/ml-32m/ratings.csv gs://movie-investment-pipeline-data-lake/raw/movielens/ratings.csv
+      - gsutil cp /tmp/movielens/ml-32m/movies.csv gs://movie-investment-pipeline-data-lake/raw/movielens/movies.csv
+      - echo "Upload complete"
