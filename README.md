@@ -15,6 +15,10 @@ Content companies invest millions in genre-specific productions without clear da
 
 ![Dashboard Preview](docs/dashboard-preview.png)
 
+## Data Notes
+
+**2014 Rating Dip:** The line chart shows a noticeable drop in ratings around 2014 followed by a sharp recovery in 2015. This is attributable to the **MovieLens v4 platform transition** (November 2014), which significantly changed the user interface and recommendation system. User activity temporarily dropped during the transition and recovered as users adapted to the new platform. This is a platform behavior artifact, not a data quality issue.
+
 ## Architecture
 ```
 MovieLens 32M (Source)
