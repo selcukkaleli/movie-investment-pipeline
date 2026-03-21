@@ -1,13 +1,13 @@
 # Movie Investment Intelligence Pipeline
 
-A end-to-end data engineering pipeline that helps content-producing companies make data-driven investment decisions about which movie genres to pursue.
+A data engineering capstone project that transforms MovieLens ratings into genre-level audience intelligence for content strategy teams. It does not estimate financial ROI directly — instead, it provides a decision-support view of long-term genre engagement and the relationship between popularity and perceived quality.
 
 ## Problem Statement
 
 Content companies invest millions in genre-specific productions without clear data on long-term audience trends or the relationship between popularity and quality. This pipeline ingests, processes, and visualizes 32 million movie ratings to answer two core business questions:
 
-1. **Which genres have sustained strong audiences over time?**
-2. **Does popularity correlate with quality — are the most-watched genres also the most appreciated?**
+1. **Which genres have sustained strong audience engagement over time?**
+2. **Does popularity correlate with quality — are the most-rated genres also the most appreciated?**
 
 ## Live Dashboard
 
@@ -17,7 +17,7 @@ Content companies invest millions in genre-specific productions without clear da
 
 ## Data Notes
 
-**2014 Rating Dip:** The line chart shows a noticeable drop in ratings around 2014 followed by a sharp recovery in 2015. This is attributable to the **MovieLens v4 platform transition** (November 2014), which significantly changed the user interface and recommendation system. User activity temporarily dropped during the transition and recovered as users adapted to the new platform. This is a platform behavior artifact, not a data quality issue.
+**2014 Rating Dip:** The line chart shows a noticeable drop in ratings around 2014 followed by a sharp recovery in 2015. This likely reflects the **MovieLens v4 platform transition** (November 2014), which significantly changed the user interface and recommendation system. This pattern is consistent with platform migration effects noted in GroupLens research. User activity temporarily dropped during the transition and recovered as users adapted to the new platform. This dip should be interpreted as a platform behavior artifact rather than a genre-demand signal, not a data quality issue.
 
 ## Architecture
 ```
@@ -63,14 +63,17 @@ This design directly supports the upstream analytical queries: filtering by time
 
 ## dbt Transformations
 ```
-models/
 ├── staging/
 │   └── stg_ratings_with_genres.sql     # Rename columns, type casting
+│                                        # Grain: one row per user-movie-genre event
 ├── intermediate/
-│   └── int_genre_ratings.sql           # Aggregate by genre + year, deduplicate ratings
+│   └── int_genre_ratings.sql           # Aggregate by genre + year
+│                                        # Grain: one row per genre-year
 └── marts/
     ├── mart_genre_trends.sql            # Genre audience trends over time → Line chart
+    │                                    # Grain: one row per genre-year
     └── mart_quality_vs_popularity.sql   # Popularity vs quality by genre → Scatter chart
+                                         # Grain: one row per genre
 ```
 
 Key transformation decisions:
@@ -172,3 +175,10 @@ movie-investment-pipeline/
 | Transformations | dbt with staging → intermediate → marts layers |
 | Dashboard | 2-tile Looker Studio dashboard (line chart + scatter chart) |
 | Reproducibility | Step-by-step setup instructions above |
+
+## Limitations
+
+- **Ratings are a proxy, not view counts**: MovieLens data captures user ratings, not actual watch counts. Rating volume is used as a proxy for audience interest and engagement.
+- **Non-representative sample**: MovieLens users are self-selected and not representative of the global general audience.
+- **Multi-label genre bias**: Films belong to multiple genres. After the genre explode step, a single rating contributes to all genres of a film — this is an intentional design choice, not a bug. Within each genre, the same user-movie pair is never counted more than once.
+- **Decision-support tool**: This pipeline is not an investment recommendation engine. It provides audience signal data to inform content strategy decisions.
