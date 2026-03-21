@@ -1,23 +1,23 @@
-# Movie Investment Intelligence Pipeline
+# Movie Genre Audience Insights Pipeline
 
-A data engineering capstone project that transforms MovieLens ratings into genre-level audience intelligence for content strategy teams. It does not estimate financial ROI directly — instead, it provides a decision-support view of long-term genre engagement and the relationship between popularity and perceived quality.
+A data engineering capstone project that transforms MovieLens ratings into genre-level audience insights for content strategy teams. It does not estimate financial ROI directly — instead, it provides a decision-support view of long-term genre engagement and the relationship between audience engagement (rating volume) and perceived quality (average rating)
 
 ## Problem Statement
 
 Content companies invest millions in genre-specific productions without clear data on long-term audience trends or the relationship between popularity and quality. This pipeline ingests, processes, and visualizes 32 million movie ratings to answer two core business questions:
 
-1. **Which genres have sustained strong audience engagement over time?**
-2. **Does popularity correlate with quality — are the most-rated genres also the most appreciated?**
+1. **Which genres have sustained strong audience engagement (rating activity) over time?**
+2. **Does popularity correlate with quality — are the most-rated genres also the highest-rated?**
 
 ## Live Dashboard
 
-🎬 [Movie Genre Investment Intelligence Dashboard](https://lookerstudio.google.com/u/0/reporting/14670535-447b-425a-978a-8803f1f2ffa9/page/UsrsF)
+🎬 [Movie Genre Investment insights Dashboard](https://lookerstudio.google.com/u/0/reporting/14670535-447b-425a-978a-8803f1f2ffa9/page/UsrsF)
 
 ![Dashboard Preview](docs/dashboard-preview.png)
 
 ## Data Notes
 
-**2014 Rating Dip:** The line chart shows a noticeable drop in ratings around 2014 followed by a sharp recovery in 2015. This likely reflects the **MovieLens v4 platform transition** (November 2014), which significantly changed the user interface and recommendation system. This pattern is consistent with platform migration effects noted in GroupLens research. User activity temporarily dropped during the transition and recovered as users adapted to the new platform. This dip should be interpreted as a platform behavior artifact rather than a genre-demand signal, not a data quality issue.
+**2014 Rating Dip:** The line chart shows a noticeable drop in ratings around 2014 followed by a sharp recovery in 2015. This likely reflects the **MovieLens v4 platform transition** (November 2014), which significantly changed the user interface and recommendation system. This pattern is consistent with platform migration effects noted in GroupLens research. User activity temporarily dropped during the transition and recovered as users adapted to the new platform. This dip should be interpreted as a platform behavior artifact rather than a data quality issue.
 
 ## Architecture
 ```
@@ -66,6 +66,7 @@ This design directly supports the upstream analytical queries: filtering by time
 ├── staging/
 │   └── stg_ratings_with_genres.sql      # Rename columns, type casting
 │                                        # Grain: one row per user-movie-genre event
+                                           (Note: ratings are exploded across multiple genres per movie)
 ├── intermediate/
 │   └── int_genre_ratings.sql            # Aggregate by genre + year
 │                                        # Grain: one row per genre-year
