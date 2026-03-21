@@ -13,7 +13,7 @@ Content companies invest millions in genre-specific productions without clear da
 
 🎬 [Movie Genre Investment Intelligence Dashboard](https://lookerstudio.google.com/u/0/reporting/14670535-447b-425a-978a-8803f1f2ffa9/page/UsrsF)
 
-[![Dashboard](https://img.shields.io/badge/Looker%20Studio-Dashboard-blue?style=for-the-badge&logo=googleanalytics)](https://lookerstudio.google.com/u/0/reporting/14670535-447b-425a-978a-8803f1f2ffa9/page/UsrsF)
+![Dashboard Preview](docs/dashboard-preview.png)
 
 ## Architecture
 ```
