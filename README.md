@@ -64,10 +64,10 @@ This design directly supports the upstream analytical queries: filtering by time
 ## dbt Transformations
 ```
 ├── staging/
-│   └── stg_ratings_with_genres.sql     # Rename columns, type casting
+│   └── stg_ratings_with_genres.sql      # Rename columns, type casting
 │                                        # Grain: one row per user-movie-genre event
 ├── intermediate/
-│   └── int_genre_ratings.sql           # Aggregate by genre + year
+│   └── int_genre_ratings.sql            # Aggregate by genre + year
 │                                        # Grain: one row per genre-year
 └── marts/
     ├── mart_genre_trends.sql            # Genre audience trends over time → Line chart
