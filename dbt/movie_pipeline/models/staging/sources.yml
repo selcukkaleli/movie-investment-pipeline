@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw
+    database: movie-investment-pipeline
+    schema: raw
+    tables:
+      - name: ratings_with_genres

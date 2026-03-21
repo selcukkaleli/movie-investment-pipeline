@@ -28,3 +28,18 @@ resource "google_bigquery_dataset" "analytics" {
   dataset_id = "analytics"
   location   = var.region
 }
+
+resource "google_bigquery_dataset" "analytics_staging" {
+  dataset_id = "analytics_staging"
+  location   = var.region
+}
+
+resource "google_bigquery_dataset" "analytics_intermediate" {
+  dataset_id = "analytics_intermediate"
+  location   = var.region
+}
+
+resource "google_bigquery_dataset" "analytics_marts" {
+  dataset_id = "analytics_marts"
+  location   = var.region
+}
