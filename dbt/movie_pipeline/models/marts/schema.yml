@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: mart_genre_trends
+    description: "Genre audience trends over time for line chart. Grain: one row per genre-year."
+    columns:
+      - name: genre
+        description: "Movie genre"
+        tests:
+          - not_null
+
+      - name: rating_year
+        description: "Year the ratings were given"
+        tests:
+          - not_null
+
+      - name: rating_count
+        description: "Number of unique user-movie ratings for this genre-year"
+        tests:
+          - not_null
+
+      - name: avg_rating
+        description: "Average rating for this genre-year"
+        tests:
+          - not_null
+
+  - name: mart_quality_vs_popularity
+    description: "Popularity vs quality by genre for scatter chart. Grain: one row per genre."
+    columns:
+      - name: genre
+        description: "Movie genre"
+        tests:
+          - not_null
+          - unique
+
+      - name: total_ratings
+        description: "Total number of unique user-movie ratings across all years"
+        tests:
+          - not_null
+
+      - name: avg_rating
+        description: "Overall average rating for this genre"
+        tests:
+          - not_null

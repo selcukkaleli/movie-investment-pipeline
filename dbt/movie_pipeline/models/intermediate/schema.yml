@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: int_genre_ratings
+    description: "Aggregated ratings by genre and year. Grain: one row per genre-year."
+    columns:
+      - name: genre
+        description: "Movie genre"
+        tests:
+          - not_null
+
+      - name: rating_year
+        description: "Year the ratings were given"
+        tests:
+          - not_null
+
+      - name: rating_count
+        description: "Number of unique user-movie ratings for this genre-year"
+        tests:
+          - not_null
+
+      - name: avg_rating
+        description: "Average rating for this genre-year"
+        tests:
+          - not_null
