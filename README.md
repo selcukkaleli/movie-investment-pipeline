@@ -36,6 +36,12 @@ dbt Staging → Intermediate → Marts
 Looker Studio Dashboard (2 tiles)
 ```
 
+### Pipeline Execution (Gantt)
+
+![Pipeline Gantt](docs/pipeline-gantt.png)
+
+> End-to-end pipeline execution: `download_unzip_upload` (~17 min) → `run_spark_job` (~26 min). Total: ~43 minutes.
+
 ## Tech Stack
 
 | Layer | Tool | Purpose |
@@ -80,6 +86,16 @@ This design directly supports the upstream analytical queries: filtering by time
 Key transformation decisions:
 - Ratings are deduplicated using `COUNT(DISTINCT CONCAT(user_id, '_', movie_id))` per genre to avoid double-counting from the genre explode step
 - Genres with value `(no genres listed)` are excluded from marts
+
+### dbt Tests
+
+All models are tested with generic dbt tests:
+- `not_null` — on all key columns
+- `unique` — on grain columns (e.g. genre in mart_quality_vs_popularity)
+- `accepted_values` — rating values must be between 0.5 and 5.0
+```bash
+dbt test  # 18/18 tests passing
+```
 
 ## Reproducibility
 
