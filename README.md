@@ -161,7 +161,7 @@ dbt run
 
 ### Step 6 — Dashboard
 
-Open the [live dashboard](https://lookerstudio.google.com/u/0/reporting/14670535-447b-425a-978a-8803f1f2ffa9/page/UsrsF) or connect your own Looker Studio report to:
+Open the [live dashboard](https://lookerstudio.google.com/reporting/14670535-447b-425a-978a-8803f1f2ffa9) or connect your own Looker Studio report to:
 - `analytics_marts.mart_genre_trends`
 - `analytics_marts.mart_quality_vs_popularity`
 
